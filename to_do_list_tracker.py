@@ -26,30 +26,67 @@ def delete(id, dic):
     
     
 while True:
+    # Allows user to enter commands
     command = input("")
     
+    # Exit Criteria
     if command.lower() == "quit": break
     
     file = command.split(" ")[0]
     
+    # Incase of invalid name
     try:
         with open(f"{file}.txt", "r") as f:
             for line in f:  
-                sections = line.split(",")           
-                items[id] = {"description": sections[0], "status": sections[1], "createdAt": sections[2], "updatedAt": sections[3]}
-                id += 1
+                
+                # Check for empty lines
+                line = line.strip()
+                if not line:
+                    continue
+                    
+                sections = line.split(",")      
+                id = int(sections[0]) 
+                # Convert into dictionary
+                items[id] = {"description": sections[1], "status": sections[2], "createdAt": sections[3], "updatedAt": sections[4]}
+                
             
             task = command.split(" ")[1]
             
             if task.lower() == "add":
-                add(command.split(" ")[2], items, command.split(" ")[3])
-            elif task.lower() == "update":
-                update(command.split(" ")[2], items, command.split(" ")[3])
-            elif task.lower() == "mark":
-                mark(command.split(" ")[2], items, command.split(" ")[3])
-            elif task.lower() == "delete":
-                delete(command.split(" ")[2], items)
+                try:
+                    id = max(items.keys()) + 1
+                except:
+                    id = 1
+                add(id, items, command.split(" ")[2])
+            else:
+                # Incase they enter a non int for ID
+                try:
+                    id = int(command.split(" ")[2])
+                except:
+                    print("Invalid ID")
+                    task = "null"
+                
+                # Incase of ID that does not exist
+                try:
+                    items[id] = items[id]
+                except:
+                    print("Invalid ID")
+                    task = "null"
+                
+                
+                if task.lower() == "update":
+                    desc = " ".join(command.split(" ")[3:])
+                    update(int(command.split(" ")[2]), items, desc)
+                elif task.lower() == "mark":
+                    stat = " ".join(command.split(" ")[3:])
+                    mark(int(command.split(" ")[2]), items, stat)
+                elif task.lower() == "delete":
+                    delete(int(command.split(" ")[2]), items)
         
+        with open(f"{file}.txt", "w") as f:
+            for id, item in items.items():
+                # Rewriting everything to the file
+                f.write(f"{id},{item['description']},{item['status']},{item['createdAt']},{item['updatedAt']}\n")
         
             
 
