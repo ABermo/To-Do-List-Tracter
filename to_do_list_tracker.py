@@ -24,7 +24,24 @@ def mark(id, dic, stat):
 def delete(id, dic):
     del dic[id]
     
-    
+def list_items(dic):
+    for id, item in dic.items():
+        print(f"{id}:")
+        print(f"{item['description']}")
+        print(f"{item['status']}")
+        print(f"{item['createdAt']}")
+        print(f"{item['updatedAt']}")
+        print("\n")
+
+def list_stat(dic, stat):
+    for id, item in dic.items():
+        if item['status'] == stat:
+            print(f"{id}:")
+            print(f"{item['description']}")
+            print(f"{item['status']}")
+            print(f"{item['createdAt']}")
+            print(f"{item['updatedAt']}")
+            print("\n")
 while True:
     # Allows user to enter commands
     command = input("")
@@ -58,6 +75,10 @@ while True:
                 except:
                     id = 1
                 add(id, items, command.split(" ")[2])
+            elif len(command.split(" ")) > 2 and command.split(" ")[1].lower() == "list":
+                list_stat(items, " ".join(command.split(" ")[2:]))
+            elif task.lower() == "list":
+                list_items(items)
             else:
                 # Incase they enter a non int for ID
                 try:
