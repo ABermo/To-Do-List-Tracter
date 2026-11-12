@@ -1,14 +1,17 @@
 from datetime import datetime
 
-id = 1
-description = ""
-status = ""
-createdAt = ""
-updatedAt = ""
-
 items = {}
 
-
+def help():
+    print("Commands:")
+    print("add <text>")
+    print("update <id> <text>")
+    print("mark <id> <text>")
+    print("delete <id>")
+    print("list")
+    print("list <status>")
+    print("create")
+    print("\nUpdate changes description\nMark changes status")
 
 def add(id, dic, desc):
     dic[id] = {"description": desc, "status": "to do", "createdAt": datetime.now(), "updatedAt": False}
@@ -42,13 +45,36 @@ def list_stat(dic, stat):
             print(f"{item['createdAt']}")
             print(f"{item['updatedAt']}")
             print("\n")
+            
 while True:
+    print("To Do List Tracker")
+    print("Syntax:")
+    print("<filename> <command> <id> <text>")
+    print("Quit to exit")
+    print("For more info enter Help")
+    
     # Allows user to enter commands
     command = input("")
     
     # Exit Criteria
     if command.lower() == "quit": break
+    if command.lower() == "help": 
+        help()
+        command = input("")
+        if command.lower() == "quit": break    
+        file = command.split(" ")[0]
     
+    file = command.split(" ")[0]
+    
+    if (command.split(" ")[1].lower() == "create"):
+        try:
+            f = open(f"{file}.txt", "x")
+        except:
+            print("File already Exists")
+            
+    # Allows user to immediately use the file
+    command = input("")
+    if command.lower() == "quit": break    
     file = command.split(" ")[0]
     
     # Incase of invalid name
